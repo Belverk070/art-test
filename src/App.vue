@@ -1,20 +1,20 @@
 <template>
-  <h1 class="app__title">
+  <h1 class="title">
     SEND<br />
     A REQUEST
   </h1>
-  <section class="app__content">
-    <div class="app__info">
-      <p class="app__description">
+  <section class="content">
+    <div class="content-wrapper">
+      <p class="content__description">
         Leave your contacts and we will contact you as soon as possible
       </p>
-      <img class="app__logo" src="./assets/images/logo.svg" alt="Company logo" />
+      <img class="content__logo" src="./assets/images/logo.svg" alt="Company logo" />
     </div>
     <request-form />
   </section>
   <footer class="footer">
     <p class="footer__author">© 2022 LUXURY RESIDENCE</p>
-    <a class="footer__policy" href="#">Privacy Policy</a>
+    <a class="footer__policy-link" href="#">Privacy Policy</a>
   </footer>
 </template>
 
@@ -55,7 +55,7 @@ export default {
   min-height: 100vh;
   position: relative;
 }
-.app__title {
+.title {
   font-family: "GHEA Mariam";
   font-style: normal;
   font-weight: 400;
@@ -65,18 +65,18 @@ export default {
   text-transform: uppercase;
   margin-bottom: 52px;
 }
-.app__content {
+.content {
   display: flex;
   justify-content: flex-start;
   width: 100%;
   margin-bottom: 135px;
 }
-.app__info {
+.content-wrapper {
   display: flex;
   flex-direction: column;
   margin-right: 36%;
 }
-.app__description {
+.content__description {
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -86,7 +86,7 @@ export default {
   margin-bottom: 90px;
   max-width: 200px;
 }
-.app__logo {
+.content__logo {
   width: 192px;
   height: 47px;
   opacity: 0.2;
@@ -105,7 +105,7 @@ export default {
   color: #ff69b4;
   margin-right: 208px;
 }
-.footer__policy {
+.footer__policy-link {
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -117,7 +117,7 @@ export default {
   text-decoration: none;
   transition: all 0.3s ease-in-out;
 }
-.footer__policy:hover {
+.footer__policy-link:hover {
   opacity: 0.6;
   transition: all 0.3s ease-in-out;
 }
@@ -129,15 +129,15 @@ export default {
   }
 }
 @media screen and (max-width: 995px) {
-  .app__title {
+  .title {
     font-size: 46px;
   }
-  .app__info {
+  .content-wrapper {
     margin-right: 0;
     gap: 40px;
     justify-content: flex-start;
   }
-  .app__description {
+  .content__description {
     margin-bottom: 0;
     margin-right: 50px;
     max-width: 300px;
@@ -148,29 +148,29 @@ export default {
   }
 }
 @media screen and (max-width: 585px) {
-  .app__content {
+  .content {
     flex-direction: column;
   }
-  .app__description {
+  .content__description {
     margin-right: 30px;
     max-width: 200px;
     font-size: 14px;
   }
-  .app__info {
+  .content-wrapper {
     margin-bottom: 20px;
   }
 }
 @media screen and (max-width: 450px) {
-  .app__info {
+  .content-wrapper {
     justify-content: flex-start;
     flex-direction: column-reverse;
     margin-bottom: 45px;
   }
-  .app__logo {
+  .content__logo {
     width: 100px;
     height: 26px;
   }
-  .app__content {
+  .content {
     flex-direction: column;
     margin-bottom: 40px;
   }

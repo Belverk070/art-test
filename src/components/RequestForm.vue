@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent class="app__form">
+  <form @submit.prevent class="form">
     <div class="input__container">
       <label class="input__label" for="input-name">
         NAME
@@ -52,11 +52,11 @@
       </label>
     </div>
 
-    <div class="app__form-btn-container">
-      <button class="app__form-btn" type="submit" @click="handleSubmit">Call me</button>
-      <p class="app__form-policy">
+    <div class="form__action-wrapper">
+      <button class="form__submit" type="submit" @click="handleSubmit">Call me</button>
+      <p class="form__policy">
         By pressing “Send” button I agree with
-        <a class="app__form-policy_link" href="#">Privacy Policy</a>
+        <a class="form__policy-link" href="#">Privacy Policy</a>
       </p>
     </div>
   </form>
@@ -106,26 +106,26 @@ export default {
 </script>
 
 <style scoped>
-.app__form-policy_link {
+.form__policy-link {
   color: #ff69b4;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
-.app__form-policy_link:hover {
+.form__policy-link:hover {
   color: #ff0080;
   transition: all 0.3s ease-in-out;
 }
-.app__form {
+.form {
   width: 538px;
   padding-top: 40px;
 }
-.app__form-btn-container {
+.form__action-wrapper {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
   padding-top: 70px;
 }
-.app__form-btn {
+.form__submit {
   border: 1px solid #eeebe6;
   border-radius: 500px;
   background-color: transparent;
@@ -143,11 +143,11 @@ export default {
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
-.app__form-btn:hover {
+.form__submit:hover {
   opacity: 0.5;
   transition: all 0.3s ease-in-out;
 }
-.app__form-policy {
+.form__policy {
   max-width: 205px;
   font-style: normal;
   font-weight: 400;
@@ -231,30 +231,30 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
 }
 @media screen and (max-width: 995px) {
-  .app__form-btn-container {
+  .form__action-wrapper {
     justify-content: space-around;
   }
-  .app__form {
+  .form {
     padding-top: 0px;
   }
 }
 @media screen and (max-width: 585px) {
-  .app__form {
+  .form {
     width: 100%;
   }
 }
 @media screen and (max-width: 450px) {
-  .app__form-btn-container {
+  .form__action-wrapper {
     flex-direction: column;
     align-items: start;
     padding-top: 30px;
   }
-  .app__form-btn {
+  .form__submit {
     width: 100%;
     margin-right: 0;
     margin-bottom: 40px;
   }
-  .app__form-policy {
+  .form__policy {
     max-width: 100%;
     text-align: center;
   }
