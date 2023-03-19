@@ -1,93 +1,102 @@
 <template>
-  <form class="app__form">
-    <input-component
-      :inputLabel="'NAME'"
-      :id="'name'"
-      :type="'text'"
-      :required="true"
-      :modelValue="formData.nameValue"
-      @update="updateNameValue"
-    />
-    <input-component
-      :inputLabel="'PHONE'"
-      :id="'phone'"
-      :type="'tel'"
-      :required="true"
-      :invalid="!isValidPhoneNumber"
-      :modelValue="formData.phoneValue"
-      :placeholder="formData.phonePlaceholder"
-      @keyup="validatePhoneNumber"
-      @update="updatePhoneValue"
-    />
-    <input-component
-      :inputLabel="'TEMP'"
-      :id="'temp'"
-      :type="'range'"
-      :modelValue="formData.temperatureValue"
-      @update="updateTemperatureValue"
-    />
-    <input-component
-      :inputLabel="'COMMENTS'"
-      :id="'comments'"
-      :type="'text'"
-      :required="false"
-      :modelValue="formData.commentsValue"
-      @update="updateCommentsValue"
-    />
+  <form @submit.prevent class="app__form">
+    <div class="input__container">
+      <label class="input__label" for="input-name">
+        NAME
+        <input
+          class="input"
+          name="input-name"
+          id="input-name"
+          type="text"
+          v-model="formData.nameValue"
+          required
+        />
+      </label>
+
+      <label class="input__label" for="input-phone"
+        >PHONE
+        <input
+          class="input"
+          name="input-phone"
+          id="input-phone"
+          type="text"
+          :value="formData.phoneValue"
+          v-imask="mask"
+          :pattern="validationPhoneRegex"
+          @accept="validatePhoneNumber"
+          required
+        />
+      </label>
+
+      <label class="input__label" for="input-temp">
+        TEMP
+        <input
+          class="input__range"
+          name="input-temp"
+          id="input-temp"
+          type="range"
+          v-model="formData.temperatureValue"
+          :style="{ backgroundSize: formData.temperatureValue + '% 100%' }"
+        />
+      </label>
+
+      <label class="input__label" for="input-comments">
+        COMMENTS
+        <input
+          class="input"
+          name="input-comments"
+          id="input-comments"
+          type="text"
+          v-model="formData.commentsValue"
+        />
+      </label>
+    </div>
 
     <div class="app__form-btn-container">
-      <button class="app__form-btn" type="submit" @click.prevent="handleSubmit">Call me</button>
+      <button class="app__form-btn" type="submit" @click="handleSubmit">Call me</button>
       <p class="app__form-policy">
         By pressing “Send” button I agree with
         <a class="app__form-policy_link" href="#">Privacy Policy</a>
       </p>
     </div>
-    <p class="invalid-warning" v-if="!isValidPhoneNumber">Некорректный номер телефона!</p>
   </form>
 </template>
 
 <script>
-import InputComponent from './InputComponent.vue';
+import { IMaskDirective } from 'vue-imask';
 
 export default {
   name: 'RequestForm',
-  components: { InputComponent },
   data() {
     return {
       formData: {
         nameValue: null,
         phoneValue: null,
-        phonePlaceholder: 'Например: +79991234567',
         commentsValue: null,
         temperatureValue: 30,
       },
-      isValidPhoneNumber: true,
+      validationPhoneRegex: '^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{10}$',
+      mask: {
+        mask: '{+7}{ (}000{) }000{-}00{-}00',
+        lazy: true,
+      },
     };
   },
+  directives: {
+    imask: IMaskDirective,
+  },
   methods: {
-    validatePhoneNumber() {
-      const validationRegex = /^\+?7(\d{10})$/;
-      if (this.formData.phoneValue.match(validationRegex)) {
-        this.isValidPhoneNumber = true;
-      } else {
-        this.isValidPhoneNumber = false;
-      }
-    },
-    updateNameValue(value) {
-      this.formData.nameValue = value;
-    },
-    updatePhoneValue(value) {
-      this.formData.phoneValue = value;
-    },
-    updateTemperatureValue(value) {
-      this.formData.temperatureValue = value;
-    },
-    updateCommentsValue(value) {
-      this.formData.commentsValue = value;
+    validatePhoneNumber(evt) {
+      const maskRef = evt.detail;
+      this.formData.phoneValue = maskRef.value;
     },
     handleSubmit() {
-      if (this.formData.nameValue !== null && this.isValidPhoneNumber) {
+      const pattern = new RegExp(this.validationPhoneRegex);
+      if (pattern.test(this.formData.phoneValue) && this.formData.nameValue) {
         console.log(JSON.parse(JSON.stringify(this.formData)));
+        this.formData.nameValue = '';
+        this.formData.phoneValue = '';
+        this.formData.commentsValue = '';
       } else {
         console.log('Необходимо заполнить форму.');
       }
@@ -107,7 +116,7 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 .app__form {
-  /* width: 538px; */
+  width: 538px;
   padding-top: 40px;
 }
 .app__form-btn-container {
@@ -118,7 +127,7 @@ export default {
 }
 .app__form-btn {
   border: 1px solid #eeebe6;
-  border-radius: 100px;
+  border-radius: 500px;
   background-color: transparent;
   color: #eeebe6;
   font-style: normal;
@@ -128,13 +137,14 @@ export default {
   text-align: center;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 20px 60px;
+  min-width: 180px;
+  height: 56px;
   margin-right: 72px;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
 .app__form-btn:hover {
-  opacity: 0.7;
+  opacity: 0.5;
   transition: all 0.3s ease-in-out;
 }
 .app__form-policy {
@@ -146,35 +156,106 @@ export default {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.invalid-warning {
-  color: red;
-  font-size: 20px;
+.input__container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 45px;
+  gap: 49px;
 }
-
+.input__label {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.input {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(238, 235, 230, 0.5);
+  color: #eeebe6;
+  padding: 3px 0;
+}
+.input:focus-visible {
+  outline: none;
+}
+.input__range {
+  appearance: none;
+  top: 15px;
+  font-size: 9px;
+  color: white;
+  text-transform: uppercase;
+  position: relative;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #5baaf9;
+  background-image: linear-gradient(#ff69b4, #ff69b4);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+}
+.input__range::before {
+  content: "hot";
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+.input__range:after {
+  content: "cold";
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  width: 1px;
+  height: 1px;
+  scale: 13;
+  margin: 5px;
+  border-radius: 50%;
+  background-color: #b6a16b;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
 @media screen and (max-width: 995px) {
   .app__form-btn-container {
     justify-content: space-around;
   }
+  .app__form {
+    padding-top: 0px;
+  }
 }
-
 @media screen and (max-width: 585px) {
   .app__form {
     width: 100%;
   }
 }
-
 @media screen and (max-width: 450px) {
   .app__form-btn-container {
     flex-direction: column;
     align-items: start;
+    padding-top: 30px;
   }
   .app__form-btn {
     width: 100%;
     margin-right: 0;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
   .app__form-policy {
-    max-width: 90%;
+    max-width: 100%;
     text-align: center;
   }
 }
